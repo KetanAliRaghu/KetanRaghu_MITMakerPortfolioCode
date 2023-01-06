@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 from sklearn.model_selection import train_test_split
 
-df = pd.read_csv('data/sonar_all-data.csv' , header = None)
+df = pd.read_csv('../data/sonar_all-data.csv', header = None)
 print(df.shape)
 # Checking for null values
 # print(df.isna().sum())

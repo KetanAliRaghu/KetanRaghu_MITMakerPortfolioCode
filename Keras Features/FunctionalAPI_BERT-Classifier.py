@@ -17,7 +17,7 @@ encoder_url = 'https://tfhub.dev/tensorflow/bert_en_uncased_L-12_H-768_A-12/4'
 BERT_preprocess_model = hub.KerasLayer(preprocess_url)
 BERT_encoder_model = hub.KerasLayer(encoder_url)
 
-df = pd.read_csv('data/spam.csv' , encoding_errors = 'replace')
+df = pd.read_csv('../data/spam.csv', encoding_errors ='replace')
 # print(df.groupby('Category').describe())
 
 df_spam = df[df['Category'] == 'spam']

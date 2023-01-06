@@ -33,7 +33,7 @@ model.save('models/QuantizationTestingModel')
 
 # model = tf.keras.models.load_model('models/QuantizationTestingModel')
 
-converter = tf.lite.TFLiteConverter.from_saved_model('models/QuantizationTestingModel')
+converter = tf.lite.TFLiteConverter.from_saved_model('../models/QuantizationTestingModel')
 tfLite_model = converter.convert()
 
 converter.optimizations = [tf.lite.Optimize.DEFAULT]

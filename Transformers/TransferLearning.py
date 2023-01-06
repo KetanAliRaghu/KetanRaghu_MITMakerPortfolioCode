@@ -19,7 +19,7 @@ classifer = Sequential([
     hub.KerasLayer('https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/4')
 ])
 
-goldfish = Image.open('data/goldfish.jpg').resize(IMAGE_SHAPE)
+goldfish = Image.open('../data/goldfish.jpg').resize(IMAGE_SHAPE)
 goldfish = np.array(goldfish)/255
 
 result = classifer.predict(goldfish[np.newaxis , ...])
@@ -29,7 +29,7 @@ print(result)
 # data_dir = tf.keras.utils.get_file('flower_photos' , origin = flower_data , cache_dir = '.' , untar = True)
 # print(data_dir)
 
-data_dir = pathlib.Path('data/datasets/flower_photos')
+data_dir = pathlib.Path('../data/datasets/flower_photos')
 image_count = len(list(data_dir.glob('*/*.jpg'))[:5])
 print(image_count)
 

@@ -5,15 +5,17 @@ HANDLING PREPROCESSING AND RUNNING A MODEL WITH PROCESSED DATA
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+from imblearn.over_sampling import SMOTE
+
 from sklearn.metrics import confusion_matrix , classification_report
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
-import pickle
+
 import tensorflow as tf
 from tensorflow import keras
 from keras import layers as l
 
-df = pd.read_csv('data/Telco-Customer-Churn.csv')
+df = pd.read_csv('../data/Telco-Customer-Churn.csv')
 
 # Removes customerID column from Dataframe (doesn't help this model)
 df.drop('customerID' , axis = 'columns' , inplace = True)
@@ -65,9 +67,70 @@ df2[cols_to_scale] = scaler.fit_transform(df2[cols_to_scale])
 X = df2.drop('Churn' , axis = 'columns')
 y = df2['Churn']
 
-X_train , X_test , y_train , y_test = train_test_split(X , y , test_size = 0.2 , random_state = 5)
+count_class_0 , count_class_1 = df2.Churn.value_counts()
+df_class_0 = df2[df2['Churn'] == 0]
+df_class_1 = df2[df2['Churn'] == 1]
 
+""" ---------------------- UNDER-SAMPLING ----------------------
+print(count_class_0 , count_class_1)
+print(df_class_0.shape , df_class_1.shape)
+
+# Randomly takes the specified number of samples from the dataset
+df_class_0_under = df_class_0.sample(count_class_1)
+
+df_test_under = pd.concat([df_class_0_under , df_class_1] , axis = 0)
+
+print('Random Under-Sampling')
+print(df_test_under.Churn.value_counts())
+
+y = df_test_under['Churn']
+X = df_test_under.drop('Churn' , axis = 'columns')
 """
+
+""" ---------------------- OVER SAMPLING ----------------------
+# replace = True (duplicates data)
+df_class_1_over = df_class_1.sample(count_class_0 , replace = True)
+df_test_over = pd.concat([df_class_0 , df_class_1_over] , axis = 0)
+print('Random Over-Sampling')
+print(df_test_over.Churn.value_counts())
+
+y = df_test_over['Churn']
+X = df_test_over.drop('Churn' , axis = 'columns')
+"""
+
+""" ---------------------- Synthetic Minority Oversampling Technique (SMOTE) ----------------------
+smote = SMOTE(sampling_strategy = 'minority')
+X , y = smote.fit_resample(X , y)
+"""
+
+""" ---------------------- Ensemble With Under-Sampling ----------------------
+X_train , X_test , y_train , y_test = train_test_split(X , y , test_size = 0.2 , random_state = 5 , stratify = y)
+df3 = X_train.copy()
+df3['Churn'] = y_train
+
+df3_class_0 = df3[df3.Churn == 0]
+df3_class_1 = df3[df3.Churn == 1]
+
+def get_train_batch(df_major , df_minor , start , end):
+    # size of class0/3 is roughly the size of class1 (1495)
+    df_train = pd.concat([df3_class_0[:1495] , df3_class_1] , axis = 0)
+
+    y_train = df_train['Churn']
+    X_train = df_train.drop('Churn' , axis = 'columns')
+
+    return X_train , y_train
+
+X_train , y_train = get_train_batch(df3_class_0 , df3_class_1 , 0 , 1495)
+
+# RUN 3 MODELS (or until all data is used) AND TAKE THE MAJORITY PREDICTION
+# IS 2 MODELS PREDICT 0 AND ONE PREDICTS 1 THE RESULT IS 0 (similar to kNN)
+"""
+
+
+# stratify = y (ensures the split is equal to the y split)
+X_train , X_test , y_train , y_test = train_test_split(X , y , test_size = 0.2 , random_state = 5 , stratify = y)
+
+
 model = keras.Sequential([
     # Input layer should have equal number of neurons as columns/features
     l.Dense(20 , input_shape = (26,) , activation = 'relu'),
@@ -82,11 +145,11 @@ model.compile(optimizer = 'adam',
 model.fit(X_train , y_train , epochs = 100)
 model.evaluate(X_test , y_test)
 
-model.save('models/model_TFsave')
-"""
+# model.save('models/Imbalance_TCC1_TFsave')
+
 
 # tf.save(path) + tf.keras.models.load_model(path) WORK SUPER WELL
-model = tf.keras.models.load_model('models/model_TFsave')
+# model = tf.keras.models.load_model('models/model_TFsave')
 
 y_pred = model.predict(X_test)
 
@@ -101,6 +164,4 @@ print(y_test[:10])
 print(collapsed_y_pred[:10])
 
 print(classification_report(y_test , collapsed_y_pred))
-model.summary()
-
-
+print(model.summary())

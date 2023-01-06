@@ -37,7 +37,7 @@ print(history)
 model.save('models/FCC_RNN_Model')
 """
 
-model = keras.models.load_model('models/FCC_RNN_Model')
+model = keras.models.load_model('../models/FCC_RNN_Model')
 
 word_index = imdb.get_word_index()
 

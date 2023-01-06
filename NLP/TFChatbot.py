@@ -16,7 +16,7 @@ from keras.models import Model
 from sklearn.preprocessing import LabelEncoder
 import matplotlib.pyplot as plt
 
-data = pd.read_csv('data/emotion-emotion_69k.csv')
+data = pd.read_csv('../data/emotion-emotion_69k.csv')
 data['empathetic_dialogues'] = data['empathetic_dialogues'].map(lambda x: x.replace('Customer :' , '').replace('Agent :' , '').replace('#' , '').lower())
 data['empathetic_dialogues'] = data['empathetic_dialogues'].map(lambda x: x.replace('.' , '').replace(',' , '').replace('!' , '').replace('?' , ''))
 data['empathetic_dialogues'] = data['empathetic_dialogues'].map(lambda x: x.replace('-' , '').replace('*' , '').replace('$' , '').replace('%' , ''))
@@ -88,7 +88,7 @@ train = model.fit(X_train , y_train , epochs = 200 , callbacks = [lr_scheduler ,
 # np.save('model_logs/TFChatbot_96Acc_history' , train.history)
 # model.save('models/TFChatbot_96Acc')
 
-model = keras.saving.save.load_model('models/TFChatbot_96Acc')
+model = keras.saving.save.load_model('../models/TFChatbot_96Acc')
 
 text = 'hello'
 text = tokenizer.texts_to_sequences([text])

@@ -41,7 +41,7 @@ class CustomCallback(callbacks.Callback):
             self.model.stop_training = True
 
 save_callback = callbacks.ModelCheckpoint(
-    filepath = 'models/CallbackCheckpoints/',
+    filepath ='../models/CallbackCheckpoints/',
     save_weights_only = True,
     monitor = 'accuracy', # If using both training and validation set, need to specify val_ or train_
     save_best_only = False

@@ -3,7 +3,7 @@ from gensim.models import Word2Vec
 import Levenshtein
 import pandas as pd
 
-df = pd.read_json('data/Reviews_Cell_Phones_Accessories_5.json' , lines = True)
+df = pd.read_json('../data/Reviews_Cell_Phones_Accessories_5.json', lines = True)
 # print(df.head())
 # print(gensim.utils.simple_preprocess(df.reviewText[0]))
 

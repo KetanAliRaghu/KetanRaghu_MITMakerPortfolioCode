@@ -17,7 +17,7 @@ text_test = ['nice movie indeed' , 'I don\'t like python programming']
 # text_preprocessed = BERT_preprocess_model(text_test)
 
 
-df = pd.read_csv('data/spam.csv' , encoding_errors = 'replace')
+df = pd.read_csv('../data/spam.csv', encoding_errors ='replace')
 # print(df.groupby('Category').describe())
 
 df_spam = df[df['Category'] == 'spam']

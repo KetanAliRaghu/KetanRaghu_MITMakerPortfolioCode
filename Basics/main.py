@@ -22,7 +22,7 @@ model = keras.Sequential([
     Dense(10 , activation = 'sigmoid')
 ])
 
-tf_callback = tf.keras.callbacks.TensorBoard(log_dir = 'logs/' , histogram_freq = 1)
+tf_callback = tf.keras.callbacks.TensorBoard(log_dir ='../logs/', histogram_freq = 1)
 
 model.compile(optimizer = 'SGD',
               loss = 'sparse_categorical_crossentropy',

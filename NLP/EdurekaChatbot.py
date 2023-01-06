@@ -17,7 +17,7 @@ from keras import losses , optimizers
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 
-df = pd.read_csv('data/emotion-emotion_69k.csv')
+df = pd.read_csv('../data/emotion-emotion_69k.csv')
 
 for i in range(len(df['empathetic_dialogues'])):
     df['empathetic_dialogues'][i] = df['empathetic_dialogues'][i].replace('Customer :' , '').replace('Agent :' , '')
@@ -65,7 +65,7 @@ print(X_train , X_test)
 print(y_train , y_test)
 
 
-model = keras.saving.save.load_model('models/EdurekaChatbot_0Acc_20Epoch')
+model = keras.saving.save.load_model('../models/EdurekaChatbot_0Acc_20Epoch')
 
 def pad_seq(texts , length):
     returned = []
